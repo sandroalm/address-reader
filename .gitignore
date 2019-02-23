@@ -1,0 +1,7 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# eclipse project file
+.settings/
+.classpath
+.project
