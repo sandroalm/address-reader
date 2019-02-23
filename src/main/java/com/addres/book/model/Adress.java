@@ -21,7 +21,7 @@ public class Adress {
 		this.gender = gender;
 		this.dateOfBirth = date;
 	}
-
+	
 	public static Adress from(String line) throws ParseException {
 		Adress result = null;
 		if (line != null && !line.trim().isEmpty()) {

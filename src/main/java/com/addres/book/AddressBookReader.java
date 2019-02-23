@@ -8,8 +8,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.log4j.Logger;
@@ -30,9 +31,9 @@ public class AddressBookReader {
 		// demonstration
 		AdressService service = applicationContext.getBean(AdressService.class);
 
-		Path path = findPath(args);
+		List<Adress> adresses = args != null ? read(args)
+				: read(Paths.get(getSystemResource(ADDRESS_BOOK_DEFAULT).toURI()));
 
-		List<Adress> adresses = AddressBookReader.read(path);
 		Adress bill = service.findByName("Bill McKnight", adresses);
 		Adress paul = service.findByName("Paul Robinson", adresses);
 
@@ -41,27 +42,28 @@ public class AddressBookReader {
 		logger.info("How many days older is Bill than Paul? " + bill.ageDifferenceInDays(paul));
 	}
 
-	private static Path findPath(String[] args) throws URISyntaxException {
-		String path = args != null && args.length > 0 ? args[0] : ADDRESS_BOOK_DEFAULT;
-		return Paths.get(getSystemResource(path).toURI());
-	}
-	
 	public static List<Adress> read(Path path) {
-		List<Adress> result = new ArrayList<>();
 		try (Stream<String> stream = Files.lines(path)) {
-			stream.forEach(line -> {
-				try {
-					result.add(Adress.from(line));
-				} catch (ParseException e) {
-					logger.error("Not possible to parse Adress from line" + line);
-				}
-			});
+			return stream.map(line -> {
+				return fromLIne(line);
+			}).collect(Collectors.toList());
 		} catch (IOException e) {
 			logger.error(e.getMessage());
 			return null;
 		}
+	}
 
-		return result;
+	public static List<Adress> read(String[] lines) {
+		return Arrays.stream(lines).map(line -> fromLIne(line)).collect(Collectors.toList());
+	}
+
+	private static Adress fromLIne(String line) {
+		try {
+			return Adress.from(line);
+		} catch (ParseException e) {
+			logger.error("Not possible to parse Adress from line" + line);
+		}
+		return null;
 	}
 
 }

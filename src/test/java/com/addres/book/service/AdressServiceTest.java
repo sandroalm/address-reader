@@ -20,6 +20,7 @@ public class AdressServiceTest {
 	private static final String GEMMA_LANE = "Gemma Lane, Female, 20/11/91";
 	private static final String PAUL_ROBINSON = "Paul Robinson, Male, 15/01/85";
 	private static final String BILL_MC_KNIGHT = "Bill McKnight, Male, 16/03/77";
+	
 	private List<Adress> adresses;
 	private AdressService adressService = new AdressServiceImpl();
 
@@ -33,13 +34,13 @@ public class AdressServiceTest {
 	public void shouldCountGender() {
 		// given
 		String gender = "Male";
-		Long numberOfMalesInTheFile = 3l;
+		Long numberOfMalesInAdresses = 3l;
 
 		// when
 		Long countByGender = adressService.countByGender(gender, adresses);
 
 		// then
-		assertThat(countByGender, is(numberOfMalesInTheFile));
+		assertThat(countByGender, is(numberOfMalesInAdresses));
 	}
 
 	@Test
