@@ -1,10 +1,11 @@
 package com.addres.book.service;
 
+import static com.addres.book.model.Adress.from;
+import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Before;
@@ -14,14 +15,18 @@ import com.addres.book.model.Adress;
 
 public class AdressServiceTest {
 
+	private static final String WES_JACKSON = "Wes Jackson, Male, 14/08/74";
+	private static final String SARAH_STONE = "Sarah Stone, Female, 20/09/80";
+	private static final String GEMMA_LANE = "Gemma Lane, Female, 20/11/91";
+	private static final String PAUL_ROBINSON = "Paul Robinson, Male, 15/01/85";
+	private static final String BILL_MC_KNIGHT = "Bill McKnight, Male, 16/03/77";
 	private List<Adress> adresses;
 	private AdressService adressService = new AdressServiceImpl();
 
 	@Before
 	public void setUp() throws ParseException {
-		adresses = Arrays.asList(Adress.from("Bill McKnight, Male, 16/03/77"),
-				Adress.from("Paul Robinson, Male, 15/01/85"), Adress.from("Gemma Lane, Female, 20/11/91"),
-				Adress.from("Sarah Stone, Female, 20/09/80"), Adress.from("Wes Jackson, Male, 14/08/74"));
+		adresses = asList(from(BILL_MC_KNIGHT), from(PAUL_ROBINSON), from(GEMMA_LANE), from(SARAH_STONE),
+				from(WES_JACKSON));
 	}
 
 	@Test
@@ -40,7 +45,7 @@ public class AdressServiceTest {
 	@Test
 	public void shouldFindTheOldest() throws ParseException {
 		// given
-		Adress oldest = Adress.from("Wes Jackson, Male, 14/08/74");
+		Adress oldest = from(WES_JACKSON);
 
 		// when
 		Adress result = adressService.findOldest(adresses);
@@ -52,7 +57,7 @@ public class AdressServiceTest {
 	@Test
 	public void shouldFindByName() throws ParseException {
 		// given
-		Adress bill = Adress.from("Bill McKnight, Male, 16/03/77");
+		Adress bill = from(BILL_MC_KNIGHT);
 		String nameToFind = "Bill McKnight";
 
 		// when
